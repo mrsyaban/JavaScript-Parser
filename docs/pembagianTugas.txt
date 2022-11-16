@@ -1,0 +1,19 @@
+semua orang :
+buat CFG
+
+Sakti :
+CFG -> CNF
+
+Ulung :
+FA 
+
+Rizky :
+CYK
+FA
+
+
+workflow :
+buat CFG
+CFG -> CNF
+statement diterima apa nggak cek pakai CYK
+ngecek katanya valid apa nggak -> FA/lexer
