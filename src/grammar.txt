@@ -25,6 +25,10 @@ MATHOP2 -> 'mult' | 'mult' 'mult' | 'div' | 'div' 'div' | 'mod' | 'plus' | 'min'
 
 FUNCEXP -> 'id' TUPLE
 
+TRY -> LC STMTS RC CF
+CF -> CATCH | FINALLY | CATCH FINALLY
+CATCH -> LC STMTS RC 
+FINALLY -> LC STMTS RC
 
 ARR -> LP ARR RP | LB ARRLIST RB
 ARRLIST -> EXP | ε
