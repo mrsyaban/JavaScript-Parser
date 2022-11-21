@@ -1,6 +1,6 @@
 S -> STMTS NL | ε
 STMTS -> STMTS NL1 STMT | STMT NL
-STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | TRY | CATCH | LET | 'pass' | 'break' | 'cont'
+STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | TRY | CATCH | LET | CONST | 'pass' | 'break' | 'cont'
 
 ASSIGN -> ASSIGNCHAIN | 'id' ASSIGNOP EXP
 ASSIGNCHAIN -> 'id' 'eq' ASSIGNCHAIN | 'id' 'eq' EXP
@@ -18,6 +18,7 @@ PARMATHEXP -> EXP NL MATHOP2 NL EXP | MATHEXP
 LOGICEXP -> EXP RELOP EXP | 'not' EXP
 RELOP -> 'and' | 'or' | 'is' | 'is' 'not' | 'in' | 'not' 'in' | 'eq' 'eq' | 'exc' 'eq' | 'gt' | 'gt' 'eq' | 'lt' | 'lt' 'eq'
 
+\\ jgn lupa tambahin incremen dan decremen
 MATHEXP -> EXP MATHOP2 EXP | MATHOP1 EXP
 MATHOP1 -> 'plus' | 'min' | 'tilde'
 MATHOP2 -> 'mult' | 'mult' 'mult' | 'div' | 'div' 'div' | 'mod' | 'plus' | 'min' | 'lt' 'lt' | 'gt' 'gt' | 'amp' | 'bnot' | 'bor'
@@ -57,7 +58,7 @@ COND -> 'if' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
 CONDTAIL -> 'elif' EXP LC STMTS RC CONDTAIL | CONDTAIL 'else' LC STMTS RC | ε
 
 // Di sini for ada banyak jenisnya, mungkin nanti bisa dipecah-pecah
-LOOP -> 'for' EXP 'in' EXP LC STMTS RC | 'while' 'EXP LC STMTS RC
+LOOP ->  'while' EXP LC STMTS RC | 'for' 'lp' EXP 'in' EXP 'rp' LC STMTS RC | 'for' 'lp' ASSIGN 'sc' RELOP 'sc' MATHEXP 'rp' LC STMTS RC 
 
 WITH -> 'with' EXP 'as' 'id' COLON STMTS
 
