@@ -1,14 +1,22 @@
 S -> STMTS NL | ε
 STMTS -> STMTS NL1 STMT | STMT NL
-STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | TRY | CATCH | LET | CONST | 'pass' | 'break' | 'cont'
+STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | TRY | LET | CONST | VAR | LET | THROW | SWITCH | 'pass' | 'break' | 'cont'
 
 ASSIGN -> ASSIGNCHAIN | 'id' ASSIGNOP EXP
 ASSIGNCHAIN -> 'id' 'eq' ASSIGNCHAIN | 'id' 'eq' EXP
 ASSIGNOP -> 'eq' | 'plus' 'eq' | 'min' 'eq' | 'mult' 'eq' | 'div' 'eq' | 'mod' 'eq' | 'div' 'div' 'eq' | 'mult' 'mult' 'eq' | 'amp' 'eq' | 'bor' 'eq' | 'bnot' 'eq' | 'gt' 'gt' 'eq' | 'lt' 'lt' 'eq'
 
+VAR -> 'var' 'id' 'eq' EXP 'sc' | 'var' 'id' 'sc'
+LET -> 'var' 'id' 'eq' EXP 'sc' | 'var' 'id' 'sc'
+
 EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ARR | ELMT | DICT | TUPLE | LIT | 'id'
 DOTEXP -> EXP 'dot' DOTEXPR
 DOTEXPR -> FUNCEXP | ELMT | 'id'
+
+SWITCH -> LP EXP RP LC CASES
+CASES -> CASE CASES
+CASE -> 'case' | 'default' LP LIT RP COLON STMTS BREAK 'sc' 
+CASE -> DEFAULT
 
 PAREXP -> LP PAREXP1 RP
 PAREXP1 -> EXP | PARLOGICEXP | PARMATHEXP | ε
@@ -24,6 +32,8 @@ MATHOP1 -> 'plus' | 'min' | 'tilde'
 MATHOP2 -> 'mult' | 'mult' 'mult' | 'div' | 'div' 'div' | 'mod' | 'plus' | 'min' | 'lt' 'lt' | 'gt' 'gt' | 'amp' | 'bnot' | 'bor'
 
 FUNCEXP -> 'id' TUPLE
+
+THROW -> 'throw' EXP 'sc'
 
 TRY -> LC STMTS RC CF
 CF -> CATCH | FINALLY | CATCH FINALLY
@@ -57,7 +67,6 @@ COND -> 'if' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
 // Di sini CONDTAIL sebelum 'else' belum tahu benar atau salah
 CONDTAIL -> 'elif' EXP LC STMTS RC CONDTAIL | CONDTAIL 'else' LC STMTS RC | ε
 
-// Di sini for ada banyak jenisnya, mungkin nanti bisa dipecah-pecah
 LOOP ->  'while' EXP LC STMTS RC | 'for' 'lp' EXP 'in' EXP 'rp' LC STMTS RC | 'for' 'lp' ASSIGN 'sc' RELOP 'sc' MATHEXP 'rp' LC STMTS RC 
 
 WITH -> 'with' EXP 'as' 'id' COLON STMTS
@@ -77,6 +86,7 @@ INHERIT -> INHERIT COMMA PKG | PKG | ε
 
 COMMA -> 'comma' NL
 COLON -> 'colon' NL
+BREAK -> NL 'break'
 LC -> 'lc' NL
 RC -> NL 'rc'
 LB -> 'lb' NL
@@ -85,3 +95,4 @@ LP -> 'lp' NL
 RP -> NL 'rp'
 NL -> NL 'nl' | 'nl' | ε
 NL1 -> NL1 'nl' | 'nl'
+SC -> 'sc' NL 
