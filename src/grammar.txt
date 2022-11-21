@@ -47,7 +47,7 @@ IMPORT -> 'from' FROMPKG IMPORT | 'import' PKG 'as' 'id' | 'import' PKG
 FROMPKG -> 'dot' PKG | 'dot' 'dot' PKG | PKG | 'dot'
 PKG -> 'id' 'dot' PKG | 'id'
 
-COND -> 'if' EXP LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
+COND -> 'if' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
 // Di sini CONDTAIL sebelum 'else' belum tahu benar atau salah
 CONDTAIL -> 'elif' EXP LC STMTS RC CONDTAIL | CONDTAIL 'else' LC STMTS RC | ε
 
