@@ -1,22 +1,25 @@
 S -> STMTS NL | ε
 STMTS -> STMTS NL1 STMT | STMT NL
-STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | TRY | LET | CONST | VAR | LET | THROW | SWITCH | 'pass' | 'break' | 'cont'
+STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | TRY | LET | CONST | VAR | LET | THROW | SWITCH | BREAK | CONT 'pass' | 'break' | 'cont'
 
 ASSIGN -> ASSIGNCHAIN | 'id' ASSIGNOP EXP
 ASSIGNCHAIN -> 'id' 'eq' ASSIGNCHAIN | 'id' 'eq' EXP
 ASSIGNOP -> 'eq' | 'plus' 'eq' | 'min' 'eq' | 'mult' 'eq' | 'div' 'eq' | 'mod' 'eq' | 'div' 'div' 'eq' | 'mult' 'mult' 'eq' | 'amp' 'eq' | 'bor' 'eq' | 'bnot' 'eq' | 'gt' 'gt' 'eq' | 'lt' 'lt' 'eq'
 
-VAR -> 'var' 'id' 'eq' EXP 'sc' | 'var' 'id' 'sc'
-LET -> 'var' 'id' 'eq' EXP 'sc' | 'var' 'id' 'sc'
+VAR -> 'var' ASSIGNCHAIN | 'var' 'id' SC
+LET -> 'let' ASSIGNCHAIN | 'let' 'id' SC
 
 EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ARR | ELMT | DICT | TUPLE | LIT | 'id'
 DOTEXP -> EXP 'dot' DOTEXPR
 DOTEXPR -> FUNCEXP | ELMT | 'id'
 
-SWITCH -> LP EXP RP LC CASES
+SWITCH -> LP EXP RP LC CASES DEFAULT RC
 CASES -> CASE CASES
-CASE -> 'case' | 'default' LP LIT RP COLON STMTS BREAK 'sc' 
-CASE -> DEFAULT
+CASE -> 'case' LP LIT RP COLON STMTS BREAK SC
+DEFAULT -> 'default' LP LIT RP COLON STMTS BREAK SC | ε
+
+BREAK -> 'break' SC
+CONT -> 'continue' SC
 
 PAREXP -> LP PAREXP1 RP
 PAREXP1 -> EXP | PARLOGICEXP | PARMATHEXP | ε
@@ -33,7 +36,7 @@ MATHOP2 -> 'mult' | 'mult' 'mult' | 'div' | 'div' 'div' | 'mod' | 'plus' | 'min'
 
 FUNCEXP -> 'id' TUPLE
 
-THROW -> 'throw' EXP 'sc'
+THROW -> 'throw' EXP SC
 
 TRY -> LC STMTS RC CF
 CF -> CATCH | FINALLY | CATCH FINALLY
@@ -49,31 +52,35 @@ OBJ -> LP OBJ RP | LC OBJLIST RC
 OBJLIST -> OBJLIST OBJ1 | OBJ1 | ε
 OBJ1 -> 'str' COLON EXP COMMA | 'str' COLON 'function' 'lp' 'rp' LC RET RC
 
-// LP dan RP kalau tidak salah kurung biasa
-// LC dan RC kalau tidak salah kurung kurawal
-
 TUPLE -> LP ARGS RP
 ARGS -> ARGS1 | ε
 ARGS1 -> ARGS1 COMMA EXP | EXP
 
-LIT -> REAL | 'int' | 'xbo' | 'str' | 'false' | 'true' | 'none'
+LIT -> REAL | 'int' | 'xbo' | 'str' | 'false' | 'true' | 'null'
 REAL -> 'int' 'dot' 'int' | 'dot' 'int'
+
+IMPORT -> 'import' PKGS 'from' 'str' SC | 'import' DEFWC 'as' 'id' 'from' 'str' SC| 'import' 'str' SC
+DEFWC -> 'id' 'wildcard' | 'id' 
+PKGS -> EXPORTS | DEFWC
+EXPORTS -> 'lc' EXPORT 'rc' | 'lc' EXPORT 'rc' 'comma' DEFWC | DEFWC 'comma' 'lc' EXPORT 'rc' | 'lc' EXPORTAS 'rc' | 'lc' 'str' 'rc' | 'lc' 'default' 'rc'
+EXPORT -> 'id' 'comma' EXPORT | 'id' 
+EXPORTAS -> 'id' 'comma' EXPORTAS 'comma' 'id' | 'str' 'comma' EXPORTAS 'comma' 'id' | 'id' 'as' 'id | 'str' 'as' 'id'
 
 IMPORT -> 'from' FROMPKG IMPORT | 'import' PKG 'as' 'id' | 'import' PKG
 FROMPKG -> 'dot' PKG | 'dot' 'dot' PKG | PKG | 'dot'
 PKG -> 'id' 'dot' PKG | 'id'
 
-COND -> 'if' LP EXP RP LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
-// Di sini CONDTAIL sebelum 'else' belum tahu benar atau salah
-CONDTAIL -> 'elif' EXP LC STMTS RC CONDTAIL | CONDTAIL 'else' LC STMTS RC | ε
+COND -> 'if' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'if' 'lp' LIT 'rp' LC STMTS RC
+CONDTAIL -> 'elif' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'elif' 'lp' LIT 'rp' LC STMTS RC CONDTAIL
+ELSE -> 'else' LC STMTS RC | ε
 
-LOOP ->  'while' EXP LC STMTS RC | 'for' 'lp' EXP 'in' EXP 'rp' LC STMTS RC | 'for' 'lp' ASSIGN 'sc' RELOP 'sc' MATHEXP 'rp' LC STMTS RC 
-CONST -> 'const' ASSIGN 'sc' | 'const' ARR 'sc' | 'const' OBJ 'sc'
+LOOP ->  'while' 'lp' EXP 'rp' LC STMTS RC | 'for' 'lp' EXP 'in' EXP 'rp' LC STMTS RC | 'for' 'lp' ASSIGNCHAIN 'sc' RELOP 'sc' MATHEXP 'rp' LC STMTS RC | 'for' 'lp' 'id' 'sc' RELOP 'sc' MATHEXP 'rp' LC STMTS RC
+
+CONST -> 'const' ASSIGNCHAIN 'sc' | 'const' ARR 'sc' | 'const' OBJ 'sc'
 
 WITH -> 'with' EXP 'as' 'id' COLON STMTS 
 
-RAISE -> RAISE 'from' 'id' | 'raise' 'id' | 'raise' FUNCEXP
-RET -> 'return' EXP 'sc' | 'return'
+RET -> 'return' EXP SC | 'return'
 
 DEF -> 'def' 'id' LP DEFARGS RP DEFRETT COLON STMTS
 DEFARGS -> DEFARGS1 | ε
