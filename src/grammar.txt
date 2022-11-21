@@ -16,6 +16,7 @@ DOTEXPR -> FUNCEXP | ELMT | 'id'
 SWITCH -> LP EXP RP LC CASES DEFAULT RC
 CASES -> CASE CASES
 CASE -> 'case' LP LIT RP COLON STMTS BREAK SC
+
 DEFAULT -> 'default' LP LIT RP COLON STMTS BREAK SC | ε
 
 BREAK -> 'break' SC
@@ -45,12 +46,15 @@ FINALLY -> LC STMTS RC
 
 ARR -> LP ARR RP | LB ARRLIST RB
 ARRLIST -> EXP | ε
-//let dan var
+
 ELMT -> 'id' LB EXP RB
+
+PARAM -> 'id' | 'id' 'dot' PARAM1 | ε
+PARAM1 -> 'id' | 'id' 'dot' PARAM1
 
 OBJ -> LP OBJ RP | LC OBJLIST RC
 OBJLIST -> OBJLIST OBJ1 | OBJ1 | ε
-OBJ1 -> 'str' COLON EXP COMMA | 'str' COLON 'function' 'lp' 'rp' LC RET RC
+OBJ1 -> 'str' COLON EXP COMMA | 'str' COLON FUNCEXP
 
 TUPLE -> LP ARGS RP
 ARGS -> ARGS1 | ε
@@ -66,10 +70,6 @@ EXPORTS -> 'lc' EXPORT 'rc' | 'lc' EXPORT 'rc' 'comma' DEFWC | DEFWC 'comma' 'lc
 EXPORT -> 'id' 'comma' EXPORT | 'id' 
 EXPORTAS -> 'id' 'comma' EXPORTAS 'comma' 'id' | 'str' 'comma' EXPORTAS 'comma' 'id' | 'id' 'as' 'id | 'str' 'as' 'id'
 
-IMPORT -> 'from' FROMPKG IMPORT | 'import' PKG 'as' 'id' | 'import' PKG
-FROMPKG -> 'dot' PKG | 'dot' 'dot' PKG | PKG | 'dot'
-PKG -> 'id' 'dot' PKG | 'id'
-
 COND -> 'if' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'if' 'lp' LIT 'rp' LC STMTS RC
 CONDTAIL -> 'elif' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'elif' 'lp' LIT 'rp' LC STMTS RC CONDTAIL
 ELSE -> 'else' LC STMTS RC | ε
@@ -81,6 +81,10 @@ CONST -> 'const' ASSIGNCHAIN 'sc' | 'const' ARR 'sc' | 'const' OBJ 'sc'
 WITH -> 'with' EXP 'as' 'id' COLON STMTS 
 
 RET -> 'return' EXP SC | 'return'
+
+ID -> 'id' | ID 'dot' 'id'
+
+FUNCTION -> 'function' 'lp' 'id' 'rp' |
 
 DEF -> 'def' 'id' LP DEFARGS RP DEFRETT COLON STMTS
 DEFARGS -> DEFARGS1 | ε
