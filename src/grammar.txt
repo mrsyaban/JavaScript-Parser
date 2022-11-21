@@ -42,12 +42,12 @@ FINALLY -> LC STMTS RC
 
 ARR -> LP ARR RP | LB ARRLIST RB
 ARRLIST -> EXP | ε
-
+//let dan var
 ELMT -> 'id' LB EXP RB
 
-DICT -> LP DICT RP | LC DICTLIST RC
-DICTLIST -> DICTLIST DICT1 | DICT1 | ε
-DICT1 -> 'str' COLON EXP COMMA
+OBJ -> LP OBJ RP | LC OBJLIST RC
+OBJLIST -> OBJLIST OBJ1 | OBJ1 | ε
+OBJ1 -> 'str' COLON EXP COMMA | 'str' COLON 'function' 'lp' 'rp' LC RET RC
 
 // LP dan RP kalau tidak salah kurung biasa
 // LC dan RC kalau tidak salah kurung kurawal
@@ -63,16 +63,17 @@ IMPORT -> 'from' FROMPKG IMPORT | 'import' PKG 'as' 'id' | 'import' PKG
 FROMPKG -> 'dot' PKG | 'dot' 'dot' PKG | PKG | 'dot'
 PKG -> 'id' 'dot' PKG | 'id'
 
-COND -> 'if' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
+COND -> 'if' LP EXP RP LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
 // Di sini CONDTAIL sebelum 'else' belum tahu benar atau salah
 CONDTAIL -> 'elif' EXP LC STMTS RC CONDTAIL | CONDTAIL 'else' LC STMTS RC | ε
 
 LOOP ->  'while' EXP LC STMTS RC | 'for' 'lp' EXP 'in' EXP 'rp' LC STMTS RC | 'for' 'lp' ASSIGN 'sc' RELOP 'sc' MATHEXP 'rp' LC STMTS RC 
+CONST -> 'const' ASSIGN 'sc' | 'const' ARR 'sc' | 'const' OBJ 'sc'
 
-WITH -> 'with' EXP 'as' 'id' COLON STMTS
+WITH -> 'with' EXP 'as' 'id' COLON STMTS 
 
 RAISE -> RAISE 'from' 'id' | 'raise' 'id' | 'raise' FUNCEXP
-RET -> 'return' EXP | 'return'
+RET -> 'return' EXP 'sc' | 'return'
 
 DEF -> 'def' 'id' LP DEFARGS RP DEFRETT COLON STMTS
 DEFARGS -> DEFARGS1 | ε
