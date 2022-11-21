@@ -74,18 +74,3 @@ LP -> 'lp' NL
 RP -> NL 'rp'
 NL -> NL 'nl' | 'nl' | ε
 NL1 -> NL1 'nl' | 'nl'
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Tubes-TBFO/cfg.txt at main · mrfirdauss-20/Tubes-TBFO
