@@ -52,7 +52,7 @@ COND -> 'if' 'lp' EXP 'rp' LC STMTS RC CONDTAIL | 'if' LIT LC STMTS RC COND
 CONDTAIL -> 'elif' EXP LC STMTS RC CONDTAIL | CONDTAIL 'else' LC STMTS RC | ε
 
 // Di sini for ada banyak jenisnya, mungkin nanti bisa dipecah-pecah
-LOOP -> 'for' EXP 'in' EXP LC STMTS RC | 'while' EXP LC STMTS RC
+LOOP -> 'for' EXP 'in' EXP LC STMTS RC | 'while' 'EXP LC STMTS RC
 
 WITH -> 'with' EXP 'as' 'id' COLON STMTS
 
@@ -79,17 +79,3 @@ LP -> 'lp' NL
 RP -> NL 'rp'
 NL -> NL 'nl' | 'nl' | ε
 NL1 -> NL1 'nl' | 'nl'
-
-SS -> CLASS_STMT
-SS -> CONST_STMT
-SS -> FUNC_STMT
-SS -> FOR_STMT
-SS -> IF_STMT
-SS -> WHILE_STMT
-SS -> SENTENCE
-SS -> SWITCH_STMT
-SS -> CASE_STMT
-SS -> TRY_STMT
-SS -> CATCH_STMT
-SS -> 
-SS -> 
