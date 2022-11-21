@@ -80,17 +80,3 @@ LP -> 'lp' NL
 RP -> NL 'rp'
 NL -> NL 'nl' | 'nl' | ε
 NL1 -> NL1 'nl' | 'nl'
-
-SS -> CLASS_STMT
-SS -> CONST_STMT
-SS -> FUNC_STMT
-SS -> FOR_STMT
-SS -> IF_STMT
-SS -> WHILE_STMT
-SS -> SENTENCE
-SS -> SWITCH_STMT
-SS -> CASE_STMT
-SS -> TRY_STMT
-SS -> CATCH_STMT
-SS -> 
-SS -> 
