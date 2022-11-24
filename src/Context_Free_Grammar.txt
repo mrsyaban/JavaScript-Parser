@@ -4,7 +4,7 @@ STMT -> COND|LOOP|RAISE|RET|EXP|ASSIGN|IMPORT|CLASS|DEF|TRY|LET|CONST|VAR|LET|TH
 
 ASSIGN -> ASSIGNCHAIN|id ASSIGNOP EXP
 ASSIGNCHAIN -> id eq ASSIGNCHAIN|id eq EXP
-ASSIGNOP -> eq|plus eq|min eq|mult eq|div eq|mod eq|div div eq|mult mult eq|amp eq|bor eq|bnot eq|gt gt eq|lt lt eq
+ASSIGNOP -> eq|plus eq|min eq|mult eq|div eq|mod eq|div div eq|mult mult eq|amp eq|bor eq|bnot eq|gt gt eq|lt lt eq | id plus plus | id min min | plus plus id | min min id
 
 VAR -> var ASSIGNCHAIN|var id SC
 LET -> let ASSIGNCHAIN|let id SC
@@ -30,7 +30,6 @@ PARMATHEXP -> EXP NL MATHOP2 NL EXP|MATHEXP
 LOGICEXP -> EXP RELOP EXP|not EXP
 RELOP -> and|or|is|is not|in|not in|not eq|eq eq|eq eq eq|exc eq|gt|gt eq|lt|lt eq
 
-\\ jgn lupa tambahin incremen dan decremen
 MATHEXP -> EXP MATHOP2 EXP|MATHOP1 EXP
 MATHOP1 -> plus|min|tilde
 MATHOP2 -> mult|mult mult|div|div div|mod|plus|min|lt lt|gt gt|amp|bnot|bor
