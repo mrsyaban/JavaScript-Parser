@@ -28,7 +28,7 @@ PARLOGICEXP -> EXP NL RELOP NL EXP | 'not' EXP | LOGICEXP
 PARMATHEXP -> EXP NL MATHOP2 NL EXP | MATHEXP
 
 LOGICEXP -> EXP RELOP EXP | 'not' EXP
-RELOP -> 'and' | 'or' | 'is' | 'is' 'not' | 'in' | 'not' 'in' | 'eq' 'eq' | 'exc' 'eq' | 'gt' | 'gt' 'eq' | 'lt' | 'lt' 'eq'
+RELOP -> 'and' | 'or' | 'is' | 'is' 'not' | 'in' | 'not' 'in' | 'eq' 'eq' | 'eq' 'eq' 'eq' | 'exc' 'eq' | 'gt' | 'gt' 'eq' | 'lt' | 'lt' 'eq'
 
 \\ jgn lupa tambahin incremen dan decremen
 MATHEXP -> EXP MATHOP2 EXP | MATHOP1 EXP
