@@ -1,25 +1,24 @@
 def read_grammar(nama_file):
     file = open(nama_file, "r")
-    cfg = {}
+    
+    CFG = {}
+    line = file.readline()
+    while line != "ENDLINE":
+        if (line != '\n') :
+            LHS, RHS = line.replace("\n", "").split(" -> ")
+            listRHS = RHS.split(" | ")
 
-    baris = file.readline()
-    while baris != "\n":
-        head, body = baris.replace("\n", "").split(" -> ")
-        body = body.split("|")
+            CFG[LHS] = [listRHS[0].split(" ")]
+            for i in range(1, len(listRHS)) :
+                CFG[LHS].append(listRHS[i].split(" "))
 
-        cfg[head] = [body[0].split(" ")]
-
-        for i in range(1, len(body)) :
-            cfg[head].append(body[i].split(" "))
-
-        baris = file.readline()
+        line = file.readline()
 
     file.close()
-
-    return cfg
+    return CFG
 
 def is_terminal(string):
-    list_of_terminal = [
+    terminalList = [
     'pass', 'break', 'cont', 'id', 'eq', 'plus',
     'min', 'mult', 'div', 'mod', 'amp', 'bor',
     'bnot', 'gt', 'lt', 'var', 'let', 'dot',
@@ -31,9 +30,9 @@ def is_terminal(string):
     'wildcard', 'lc', 'rc', 'comma', 'if', 'lp', 'rp',
     'else', 'while', 'for', 'sc', 'const', 'with',
     'return', 'function', 'def', 'class', 'colon',
-    'lb', 'rb', 'nl']
+    'lb', 'rb', 'nl', 'ε']
     
-    return string in list_of_terminal
+    return string in terminalList
 
 def is_variables(string):
     return not is_terminal(string)
@@ -207,3 +206,7 @@ def CFG_to_CNF(CFG):
             CFG[del_head].remove(del_rule)
 
     return CFG
+
+
+f = open("dict.txt","w")
+f.write(str(CFG_to_CNF(read_grammar("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//Context_Free_Grammar.txt"))))

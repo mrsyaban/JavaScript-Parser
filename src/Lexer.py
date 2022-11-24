@@ -144,10 +144,10 @@ def create_token(sentence):
     tokenArray = []
     for token in tokens:
         tokenArray.append(token)
-
+    print(" ".join(tokenArray))
     return " ".join(tokenArray)
 
 # if __name__ == "__main__":
 #     create_token('test.txt')
 
-print(create_token("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//test.txt"))
+# print(create_token("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//test.txt"))

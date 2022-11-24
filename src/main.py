@@ -4,7 +4,7 @@ from Lexer import *
 
 
 
-if CYK_parse(CFG_to_CNF(read_grammar("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//grammar.txt")), create_token("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//test.txt")):
+if CYK_parse(CFG_to_CNF(read_grammar("src/Context_Free_Grammar.txt")), create_token("test/test.txt")):
     print("ACCEPTED")
 else:
     print("SYNTAX ERROR")

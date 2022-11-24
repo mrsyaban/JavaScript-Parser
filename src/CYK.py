@@ -16,7 +16,5 @@ def CYK_parse(CNF, string_input):
                         if len(rule) == 2 and rule[0] in T[i][k] and rule[1] in T[k + 1][j]:
                             T[i][j].add(head)
 
-    # print(T[0][N - 1])
-
     return len(T[0][N - 1]) != 0
 
