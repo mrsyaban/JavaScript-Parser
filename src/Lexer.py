@@ -51,6 +51,9 @@ token_exp = [
     (r'\=(?!\=)',               "eq"),
 
     # Keyword
+    (r'\bswitch\b',             "switch"),
+    (r'\bvar\b',                "var"),
+    (r'\blet\b',                "let"),
     (r'\band\b',                "and"),
     (r'\bor\b',                 "or"),
     (r'\bnot\b',                "not"),
@@ -90,7 +93,7 @@ token_exp = [
     (r'\.',                     "dot"),
     (r'\'\'\'[(?!(\'\'\'))\w\W]*\'\'\'',       "MULTILINE"),
     (r'\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"',       "MULTILINE"),
-    (r'[A-Za-z_][A-Za-z0-9_]*', "ID"),
+    (r'[A-Za-z_][A-Za-z0-9_]*', "id"),
 ]
 
 
@@ -108,7 +111,6 @@ def lexer(teks, token_exp):
             cur = 1
             line += 1
         match = None
-
         for t in token_exp:
             pattern, tag = t
             if line == 1:
