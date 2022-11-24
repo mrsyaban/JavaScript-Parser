@@ -1,6 +1,5 @@
 import sys
 import re
-
 # list token untuk syntax ke token
 token_exp = [
     (r'[ \t]+',                 None),
@@ -89,10 +88,11 @@ token_exp = [
     (r'\btuple\b',              "LIT"),
     (r'\bset\b',                "LIT"),
     (r'\,',                     "comma"),
-    (r'\w+[.]\w+',              "KARTITIK"),
+    (r'\w+[.]\w+',              "DOTEXPR"),
     (r'\.',                     "dot"),
-    (r'\'\'\'[(?!(\'\'\'))\w\W]*\'\'\'',       "MULTILINE"),
-    (r'\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"',       "MULTILINE"),
+    (r'\\\*[(?!(\\\*))\w\W]*\\\*',       "MULTILINE"),
+    # (r'\'\'\'[(?!(\'\'\'))\w\W]*\'\'\'',       "MULTILINE"),
+    # (r'\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"',       "MULTILINE"),
     (r'[A-Za-z_][A-Za-z0-9_]*', "id"),
 ]
 
