@@ -19,3 +19,4 @@ def CYK_parse(CNF, string_input):
     # print(T[0][N - 1])
 
     return len(T[0][N - 1]) != 0
+

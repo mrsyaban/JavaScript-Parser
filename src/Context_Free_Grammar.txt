@@ -1,0 +1,110 @@
+S -> STMTS NL|ε
+STMTS -> STMTS NL1 STMT|STMT NL
+STMT -> COND|LOOP|RAISE|RET|EXP|ASSIGN|IMPORT|CLASS|DEF|TRY|LET|CONST|VAR|LET|THROW|SWITCH|BREAK|CONT pass|break|cont
+
+ASSIGN -> ASSIGNCHAIN|id ASSIGNOP EXP
+ASSIGNCHAIN -> id eq ASSIGNCHAIN|id eq EXP
+ASSIGNOP -> eq|plus eq|min eq|mult eq|div eq|mod eq|div div eq|mult mult eq|amp eq|bor eq|bnot eq|gt gt eq|lt lt eq
+
+VAR -> var ASSIGNCHAIN|var id SC
+LET -> let ASSIGNCHAIN|let id SC
+
+EXP -> PAREXP|DOTEXP|LOGICEXP|MATHEXP|FUNCEXP|ARR|ELMT|DICT|TUPLE|LIT|id
+DOTEXP -> EXP dot DOTEXPR
+DOTEXPR -> FUNCEXP|ELMT|id
+
+SWITCH -> LP EXP RP LC CASES DEFAULT RC
+CASES -> CASE CASES
+CASE -> case LP LIT RP COLON STMTS BREAK SC
+
+DEFAULT -> default LP LIT RP COLON STMTS BREAK SC|ε
+
+BREAK -> break SC
+CONT -> continue SC
+
+PAREXP -> LP PAREXP1 RP
+PAREXP1 -> EXP|PARLOGICEXP|PARMATHEXP|ε
+PARLOGICEXP -> EXP NL RELOP NL EXP|not EXP|LOGICEXP
+PARMATHEXP -> EXP NL MATHOP2 NL EXP|MATHEXP
+
+LOGICEXP -> EXP RELOP EXP|not EXP
+RELOP -> and|or|is|is not|in|not in|not eq|eq eq|eq eq eq|exc eq|gt|gt eq|lt|lt eq
+
+\\ jgn lupa tambahin incremen dan decremen
+MATHEXP -> EXP MATHOP2 EXP|MATHOP1 EXP
+MATHOP1 -> plus|min|tilde
+MATHOP2 -> mult|mult mult|div|div div|mod|plus|min|lt lt|gt gt|amp|bnot|bor
+
+FUNCEXP -> id TUPLE
+
+THROW -> throw EXP SC
+
+TRY -> LC STMTS RC CF
+CF -> CATCH|FINALLY|CATCH FINALLY
+CATCH -> LC STMTS RC 
+FINALLY -> LC STMTS RC
+
+ARR -> LP ARR RP|LB ARRLIST RB
+ARRLIST -> EXP|ε
+
+ELMT -> id LB EXP RB
+
+PARAM -> id|id dot PARAM1|ε
+PARAM1 -> id|id dot PARAM1
+
+OBJ -> LP OBJ RP|LC OBJLIST RC
+OBJLIST -> OBJLIST OBJ1|OBJ1|ε
+OBJ1 -> str COLON EXP COMMA|str COLON FUNCEXP
+
+TUPLE -> LP ARGS RP
+ARGS -> ARGS1|ε
+ARGS1 -> ARGS1 COMMA EXP|EXP
+
+LIT -> REAL|int|xbo|str|false|true|null
+REAL -> int dot int|dot int
+
+IMPORT -> import PKGS from str SC|import DEFWC as id from str SC|import str SC
+DEFWC -> id wildcard|id 
+PKGS -> EXPORTS|DEFWC
+EXPORTS -> lc EXPORT rc|lc EXPORT rc comma DEFWC|DEFWC comma lc EXPORT rc|lc EXPORTAS rc|lc str rc|lc default rc
+EXPORT -> id comma EXPORT|id 
+EXPORTAS -> id comma EXPORTAS comma id|str comma EXPORTAS comma id|id as id|str as id
+
+COND -> if lp EXP rp LC STMTS RC CONDTAIL|if lp LIT rp LC STMTS RC
+CONDTAIL -> else if lp EXP rp LC STMTS RC CONDTAIL|else if lp LIT rp LC STMTS RC CONDTAIL
+ELSE -> else LC STMTS RC|ε
+
+LOOP ->  while lp EXP rp LC STMTS RC|for lp EXP in EXP rp LC STMTS RC|for lp ASSIGNCHAIN sc RELOP sc MATHEXP rp LC STMTS RC|for lp id sc RELOP sc MATHEXP rp LC STMTS RC
+
+CONST -> const ASSIGNCHAIN sc|const ARR sc|const OBJ sc
+
+WITH -> with EXP as id COLON STMTS 
+
+RET -> return EXP SC|return
+
+ID -> id|ID dot id
+
+FUNCTION -> function lp id rp
+
+DEF -> def id LP DEFARGS RP DEFRETT COLON STMTS
+DEFARGS -> DEFARGS1|ε
+DEFARGS1 -> DEFARGS1 COMMA id|id
+DEFARG -> id COLON ARGTYPE|id
+ARGTYPE -> LP ARGTYPE RP|id LB ARGTYPE RB|id
+DEFRETT -> min gt id|ε
+
+CLASS -> class id LP INHERIT RP COLON S|class id COLON S
+INHERIT -> INHERIT COMMA PKG|PKG|ε
+
+COMMA -> comma NL
+COLON -> colon NL
+BREAK -> NL break
+LC -> lc NL
+RC -> NL rc
+LB -> lb NL
+RB -> NL rb
+LP -> lp NL
+RP -> NL rp
+NL -> NL nl|nl|ε
+NL1 -> NL1 nl|nl
+SC -> sc NL 

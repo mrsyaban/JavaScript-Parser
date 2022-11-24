@@ -3,13 +3,14 @@ def read_grammar(nama_file):
     cfg = {}
 
     baris = file.readline()
-    while baris != "":
+    while baris != "\n":
         head, body = baris.replace("\n", "").split(" -> ")
-        
-        if head not in cfg.keys():
-            cfg[head] = [body.split(" ")]
-        else:
-            cfg[head].append(body.split(" "))
+        body = body.split("|")
+
+        cfg[head] = [body[0].split(" ")]
+
+        for i in range(1, len(body)) :
+            cfg[head].append(body[i].split(" "))
 
         baris = file.readline()
 
@@ -19,75 +20,18 @@ def read_grammar(nama_file):
 
 def is_terminal(string):
     list_of_terminal = [
-        "EQ",
-        "ISEQ",
-        "KBKI",
-        "KBKA",
-        "TITIKKOMA",
-        "TITIKDUA",
-        "ADD",
-        "SUB",
-        "MUL",
-        "DIV",
-        "MOD",
-        "POW",
-        "FLOORDIV",
-        "LEQ",
-        "L",
-        "GEQ",
-        "G",
-        "NEQ",
-        "SUBAS",
-        "MULAS",
-        "SUMAS",
-        "DIVAS",
-        "MODAS",
-        "POWAS",
-        "FLOORDIVAS",
-        "AND",
-        "OR",
-        "NOT",
-        "IF",
-        "THEN",
-        "ELSE",
-        "ELIF",
-        "WHILE",
-        "RANGE",
-        "FALSE",
-        "TRUE",
-        "NONE",
-        "BREAK",
-        "AS",
-        "CLASS",
-        "CONTINUE",
-        "DEF",
-        "FOR",
-        "FROM",
-        "FORMAT",
-        "IMPORT",
-        "IN",
-        "IS",
-        "RETURN",
-        "RAISE",
-        "PASS",
-        "WITH",
-        "COMMA",
-        "KARTITIK",
-        "TITIK",
-        "PETIKSATU",
-        "PETIKDUA",
-        "KSKI",
-        "KSKA",
-        "KKKI",
-        "KKKA",
-        "INT",
-        "STRING",
-        "MULTILINE",
-        "ID",
-        "NEWLINE",
-        "TYPE",
-        "ARROW"
-    ]
+    'pass', 'break', 'cont', 'id', 'eq', 'plus',
+    'min', 'mult', 'div', 'mod', 'amp', 'bor',
+    'bnot', 'gt', 'lt', 'var', 'let', 'dot',
+    'case', 'default', 'continue', 'not',
+    'and', 'or', 'is', 'in', 'exc', 'jgn', 'lupa',
+    'tambahin', 'incremen', 'dan', 'decremen',
+    'tilde', 'throw', 'str', 'int', 'xbo', 'false',
+    'true', 'null', 'import', 'from', 'as',
+    'wildcard', 'lc', 'rc', 'comma', 'if', 'lp', 'rp',
+    'else', 'while', 'for', 'sc', 'const', 'with',
+    'return', 'function', 'def', 'class', 'colon',
+    'lb', 'rb', 'nl']
     
     return string in list_of_terminal
 
