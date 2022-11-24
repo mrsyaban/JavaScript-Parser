@@ -147,5 +147,7 @@ def create_token(sentence):
 
     return " ".join(tokenArray)
 
-if __name__ == "__main__":
-    create_token('test.txt')
+# if __name__ == "__main__":
+#     create_token('test.txt')
+
+print(create_token("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//test.txt"))

@@ -1,77 +1,21 @@
-from os import pipe
-import codecs
+def CYK_parse(CNF, string_input):
+    W = string_input.split(" ")
+    N = len(W)
+    T = [[set([]) for j in range(N)] for i in range(N)]
 
-global CNF
-CNF = {}
+    for j in range(N):
+        for head, body in CNF.items():
+            for rule in body:
+                if len(rule) == 1 and rule[0] == W[j]:
+                    T[j][j].add(head)
 
+        for i in range(j, -1, -1):
+            for k in range(i, j):
+                for head, body in CNF.items():
+                    for rule in body:
+                        if len(rule) == 2 and rule[0] in T[i][k] and rule[1] in T[k + 1][j]:
+                            T[i][j].add(head)
 
-def getCNF(pathCNF):
-    file = codecs.open(pathCNF, encoding="utf-8").read()
-    grammarCNF = file.split('\n')
-    # print(len(grammarCNF))
-    lengthGrammar = len(grammarCNF)
+    # print(T[0][N - 1])
 
-    for rule in range (9999999):
-        #melakukan split antara lhs dengan rhs dan menghapus space antar item
-        try:
-            lhs = grammarCNF[rule].split(' -> ')[0]
-        except IndexError:
-            continue
-        try:
-            rhs = grammarCNF[rule].split(' -> ')[1]
-        except:
-            continue
-        rhs = rhs.replace(" ", "")
-        rhs = rhs.split('|')
-        lengthRHS = len(rhs)
-        #iterasi setiap item di RHS dan memetakan kemunculannya ada di LHS mana
-        for item in range(lengthRHS):
-            value = CNF.get(rhs[item])
-            #jika belum pernah muncul, maka buat key baru
-            if (value == None):
-                CNF.update({rhs[item]: [lhs]})
-            #jika sudah pernah muncul, maka tambahkan LHS kemunculan item dari RHS
-            else:
-                CNF[rhs[item]].append(lhs)
-    # print("Panjang Grammar: "+str(lengthGrammar))
-    #print(CNF)            
-
-
-def cykParser(input):
-    inputLength = len(input)
-
-    #print(inputLength)
-    # inisialisasi pada tabel CYK
-    table = [[[] for j in range(i)] for i in range((inputLength), 0, -1)]
-    # mengisi baris awal dengan mencari apakah ada production yang cocok dengan input
-    for i in range(inputLength):
-        # apabila ada aturan produksi yang cocok dengan input, masukkan aturan produksi ke tabel
-        try:
-            table[0][i].extend(CNF[input[i]])
-        except KeyError:
-            continue
-            # print("belum terdefinisi untuk "+input[i])
-
-    if not inputLength and "ε" in CNF:
-        return True
-            
-    # mengisi tabel dengan algoritma CYK
-    for i in range(1, inputLength):
-        for j in range(inputLength - i):
-            for k in range(i):
-                # mencari semua aturan produksi dari hasil produksi
-                for result1 in table[i - k - 1][j]:
-                    for result2 in table[k][j + i - k]:
-                        try:
-                            table[i][j].extend(CNF[result1 + result2])
-                        except KeyError:
-                            # print("tidak ditemukan untuk "+ result1+result2)
-                            continue
-
-    for x in table:
-        print(x)
-
-    if len(table[-1][-1]) != 0:
-        return True
-    
-    return False
+    return len(T[0][N - 1]) != 0

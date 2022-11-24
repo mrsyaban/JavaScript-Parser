@@ -1,0 +1,76 @@
+S -> STMTS NL | ε
+STMTS -> STMTS NL1 STMT | STMT NL
+STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | 'pass' | 'break' | 'cont'
+
+ASSIGN -> ASSIGNCHAIN | 'id' ASSIGNOP EXP
+ASSIGNCHAIN -> 'id' 'eq' ASSIGNCHAIN | 'id' 'eq' EXP
+ASSIGNOP -> 'eq' | 'plus' 'eq' | 'min' 'eq' | 'mult' 'eq' | 'div' 'eq' | 'mod' 'eq' | 'div' 'div' 'eq' | 'mult' 'mult' 'eq' | 'amp' 'eq' | 'bor' 'eq' | 'bnot' 'eq' | 'gt' 'gt' 'eq' | 'lt' 'lt' 'eq'
+
+EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ARR | ELMT | DICT | TUPLE | LIT | 'id'
+DOTEXP -> EXP 'dot' DOTEXPR
+DOTEXPR -> FUNCEXP | ELMT | 'id'
+
+PAREXP -> LP PAREXP1 RP
+PAREXP1 -> EXP | PARLOGICEXP | PARMATHEXP | ε
+PARLOGICEXP -> EXP NL RELOP NL EXP | 'not' EXP | LOGICEXP
+PARMATHEXP -> EXP NL MATHOP2 NL EXP | MATHEXP
+
+LOGICEXP -> EXP RELOP EXP | 'not' EXP
+RELOP -> 'and' | 'or' | 'is' | 'is' 'not' | 'in' | 'not' 'in' | 'eq' 'eq' | 'exc' 'eq' | 'gt' | 'gt' 'eq' | 'lt' | 'lt' 'eq'
+
+MATHEXP -> EXP MATHOP2 EXP | MATHOP1 EXP
+MATHOP1 -> 'plus' | 'min' | 'tilde'
+MATHOP2 -> 'mult' | 'mult' 'mult' | 'div' | 'div' 'div' | 'mod' | 'plus' | 'min' | 'lt' 'lt' | 'gt' 'gt' | 'amp' | 'bnot' | 'bor'
+
+FUNCEXP -> 'id' TUPLE
+
+ARR -> LP ARR RP | LB ARRLIST RB
+ARRLIST -> EXP | ε
+
+ELMT -> 'id' LB EXP RB
+
+DICT -> LP DICT RP | LC DICTLIST RC
+DICTLIST -> DICTLIST DICT1 | DICT1 | ε
+DICT1 -> 'str' COLON EXP COMMA
+
+TUPLE -> LP ARGS RP
+ARGS -> ARGS1 | ε
+ARGS1 -> ARGS1 COMMA EXP | EXP
+
+LIT -> REAL | 'int' | 'xbo' | 'str' | 'false' | 'true' | 'none'
+REAL -> 'int' 'dot' 'int' | 'dot' 'int'
+
+IMPORT -> 'from' FROMPKG IMPORT | 'import' PKG 'as' 'id' | 'import' PKG
+FROMPKG -> 'dot' PKG | 'dot' 'dot' PKG | PKG | 'dot'
+PKG -> 'id' 'dot' PKG | 'id'
+
+COND -> 'if' EXP COLON STMTS CONDTAIL | 'if' LIT COLON STMTS COND
+CONDTAIL -> 'elif' EXP COLON STMTS CONDTAIL | CONDTAIL 'else' COLON STMTS | ε
+
+LOOP -> 'for' EXP 'in' EXP COLON STMTS | 'while' EXP COLON STMTS
+
+WITH -> 'with' EXP 'as' 'id' COLON STMTS
+
+RAISE -> RAISE 'from' 'id' | 'raise' 'id' | 'raise' FUNCEXP
+RET -> 'return' EXP | 'return'
+
+DEF -> 'def' 'id' LP DEFARGS RP DEFRETT COLON STMTS
+DEFARGS -> DEFARGS1 | ε
+DEFARGS1 -> DEFARGS1 COMMA 'id' | 'id'
+DEFARG -> 'id' COLON ARGTYPE | 'id'
+ARGTYPE -> LP ARGTYPE RP | 'id' LB ARGTYPE RB | 'id'
+DEFRETT -> 'min' 'gt' 'id' | ε
+
+CLASS -> 'class' 'id' LP INHERIT RP COLON S | 'class' 'id' COLON S
+INHERIT -> INHERIT COMMA PKG | PKG | ε
+
+COMMA -> 'comma' NL
+COLON -> 'colon' NL
+LC -> 'lc' NL
+RC -> NL 'rc'
+LB -> 'lb' NL
+RB -> NL 'rb'
+LP -> 'lp' NL
+RP -> NL 'rp'
+NL -> NL 'nl' | 'nl' | ε
+NL1 -> NL1 'nl' | 'nl'
