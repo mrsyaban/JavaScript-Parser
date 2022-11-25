@@ -1,4 +1,4 @@
-S -> STMTS NL | ε
+S -> STMTS NL | NL
 STMTS -> STMTS NL1 STMT | STMT NL
 STMT -> COND | LOOP | ASSIGN | IMPORT | FUNCTION | TRY | LET | CONST | VAR | LET | THROW | SWITCH
 
@@ -40,7 +40,7 @@ THROW -> throw EXP SC
 
 TRY -> LC STMTS RC CF
 CF -> CATCH | FINALLY | CATCH FINALLY
-CATCH -> LC STMTS RC 
+CATCH -> LC STMTS RC
 FINALLY -> LC STMTS RC
 
 ARR -> LP ARR RP | LB ARRLIST RB
@@ -63,27 +63,27 @@ LIT -> REAL | int | xbo | str | false | true | null
 REAL -> int dot int | dot int
 
 IMPORT -> import PKGS from str SC | import DEFWC as id from str SC | import str SC
-DEFWC -> id wildcard | id 
+DEFWC -> id wildcard | id
 PKGS -> EXPORTS | DEFWC
 EXPORTS -> lc EXPORT rc | lc EXPORT rc comma DEFWC | DEFWC comma lc EXPORT rc | lc EXPORTAS rc | lc str rc | lc default rc
-EXPORT -> id comma EXPORT | id 
+EXPORT -> id comma EXPORT | id
 EXPORTAS -> id comma EXPORTAS comma id | str comma EXPORTAS comma id | id as id | str as id
 
 COND -> if LP EXP RP LC STMTS RC CONDTAIL | if LP LIT RP LC STMTS RC CONDTAIL | ID1 eq EXP question EXP COLON EXP SC
 CONDTAIL -> else if LP EXP RP LC STMTS RC CONDTAIL | CONDTAIL else LC STMTS RC | ε
 
-DELETE -> delete EXP SC | delete 
+DELETE -> delete EXP SC | delete
 
-LOOP ->  while  LP EXP  RP LC STMTS RC | for  LP EXP in EXP  RP LC STMTS RC | for  LP ASSIGNCHAIN sc RELOP sc MATHEXP  RP LC STMTS RC | for  LP id sc RELOP sc MATHEXP  RP LC STMTS RC
+LOOP -> while LP EXP RP LC STMTS RC | for LP EXP in EXP RP LC STMTS RC | for LP ASSIGNCHAIN sc RELOP sc MATHEXP RP LC STMTS RC | for LP id sc RELOP sc MATHEXP RP LC STMTS RC
 
 CONST -> const ASSIGNCHAIN sc | const ARR sc | const OBJ sc
 
-WITH -> with EXP as id COLON STMTS 
+WITH -> with EXP as id COLON STMTS
 
 RET -> return EXP SC | return
 
 ID -> id | ID dot id
-ID1 -> let id | var id | id 
+ID1 -> let id | var id | id
 
 FUNCTION -> function id LP PARAM RP LC STMTS RC SC
 ANONFUNCTION -> function LP PARAM RP LC STMTS RC SC
@@ -109,6 +109,6 @@ LP -> lp NL
 RP -> NL rp
 NL -> NL nl | nl | ε
 NL1 -> NL1 nl | nl
-SC -> sc NL 
+SC -> sc NL
 
 ENDLINE

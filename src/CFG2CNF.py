@@ -17,46 +17,9 @@ def read_grammar(nama_file):
     file.close()
     return CFG
 
-def is_terminal(string):
-    terminalList = [
-    'pass', 'break', 'cont', 'id', 'eq', 'plus',
-    'min', 'mult', 'div', 'mod', 'amp', 'bor',
-    'bnot', 'gt', 'lt', 'var', 'let', 'dot',
-    'case', 'default', 'continue', 'not',
-    'and', 'or', 'is', 'in', 'exc', 'jgn', 'lupa',
-    'tambahin', 'incremen', 'dan', 'decremen',
-    'tilde', 'throw', 'str', 'int', 'xbo', 'false',
-    'true', 'null', 'import', 'from', 'as',
-    'wildcard', 'lc', 'rc', 'comma', 'if', 'lp', 'rp',
-    'else', 'while', 'for', 'sc', 'const', 'with',
-    'return', 'function', 'def', 'class', 'colon',
-    'lb', 'rb', 'nl', 'ε']
-    
-    return string in terminalList
-
-def is_variables(string):
-    return not is_terminal(string)
-
 def CFG_to_CNF(CFG):
-    # STEP 1: If the start symbol S occurs on some right side, create a new start symbol S' and a new production S' -> S.
-    list_head = list(CFG.keys())
-    list_body = list(CFG.values())
-    start_symbol = list_head[0]
-    add_new_rule = False
 
-    for rules in list_body:
-        for rule in rules:
-            if start_symbol in rule:
-                add_new_rule = True
-                break
-        if add_new_rule:
-            break
-
-    if add_new_rule:
-        new_rule = {"START" : [[start_symbol]]}
-        new_rule.update(CFG)
-        CFG = new_rule
-
+    CFG = eliminate_Start_RHS (CFG)
     # STEP 2: Remove unit productions.
     contain_unit = True
 
@@ -206,6 +169,33 @@ def CFG_to_CNF(CFG):
             CFG[del_head].remove(del_rule)
 
     return CFG
+
+def is_terminal(string):
+    return (97 <= string[0] <= 122)
+
+def is_variables(string):
+    return not is_terminal(string)
+
+def eliminate_Start_RHS (CFG) :
+    list_RHS = list(CFG.values())
+    list_LHS = list(CFG.keys())
+    
+    startSymbol =  list_LHS[0]
+    add_new_rule = False
+    for RHS in  list_RHS:
+        for statements in RHS:
+            if startSymbol in statements:
+                add_new_rule = True
+                break
+        if add_new_rule:
+            break
+
+    if add_new_rule:
+        newStart = {"START" : [[startSymbol]]}
+        CFG = {**newStart, **CFG}   
+    
+    return CFG 
+
 
 
 f = open("dict.txt","w")
