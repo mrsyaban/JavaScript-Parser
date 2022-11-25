@@ -3,25 +3,27 @@ STMTS -> STMTS NL1 STMT | STMT NL
 STMT -> COND | LOOP | ASSIGN | IMPORT | FUNCTION | TRY | LET | CONST | VAR | LET | THROW | SWITCH
 STMTLOOP -> STMTLOOP STMTS | STMTLOOP BREAK | STMTLOOP CONT | STMTS | BREAK | CONT
 
-ASSIGN -> ASSIGNCHAIN | id ASSIGNOP EXP
-ASSIGNCHAIN -> id eq ASSIGNCHAIN | id eq EXP
-ASSIGNOP -> eq | pluseq | mineq | multeq | diveq | modeq | poweq | ampeq | boreq | xoreq | sreq | usreq | sleq | andeq | oreq | nullishCoalescingEq | id inc | id dec | inc id | dec id
-
-VAR -> var ASSIGNCHAIN | var id SC
-LET -> let ASSIGNCHAIN | let id SC
-
 EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ANONFUNCTION | ARR | ELMT | DICT | TUPLE | LIT | id
 DOTEXP -> EXP dot DOTEXPR | EXP optChain DOTEXPR
 DOTEXPR -> FUNCEXP | ELMT | id
 
-SWITCH -> LP EXP RP LC CASES DEFAULT RC
-CASES -> CASE CASES
-CASE -> case LP LIT RP COLON STMTS BREAK SC
-
-DEFAULT -> default LP LIT RP COLON STMTS BREAK SC | ε
+ASSIGN -> ASSIGNCHAIN | id ASSIGNOP EXP
+ASSIGNCHAIN -> id eq ASSIGNCHAIN COMMA | id eq EXP
+ASSIGNOP -> eq | pluseq | mineq | multeq | diveq | modeq | poweq | ampeq | boreq | xoreq | sreq | usreq | sleq | andeq | oreq | nullishCoalescingEq | id inc | id dec | inc id | dec id
 
 BREAK -> break SC
 CONT -> continue SC
+
+SWITCH -> LP EXP RP LC CASES RC
+CASES -> CASE CASES | CASE DEFAULT | DEFAULT | CASE
+CASE -> case LP LIT RP COLON STMTS BREAK SC
+
+DEFAULT -> default LP LIT RP COLON STMTS BREAK SC
+
+CONST -> const ASSIGNCHAIN SC
+
+VAR -> var ASSIGNCHAIN SC | var id SC
+LET -> let ASSIGNCHAIN SC | let id SC
 
 PAREXP -> LP PAREXP1 RP
 PAREXP1 -> EXP | PARLOGICEXP | PARMATHEXP | ε
@@ -77,7 +79,6 @@ DELETE -> delete EXP SC | delete
 
 LOOP ->  while  LP EXP  RP LC STMTLOOP RC | for  LP EXP in EXP  RP LC STMTLOOP RC | for  LP ASSIGNCHAIN sc RELOP sc MATHEXP  RP LC STMTLOOP RC | for  LP id sc RELOP sc MATHEXP  RP LC STMTLOOP RC
 
-CONST -> const ASSIGNCHAIN sc | const ARR sc | const OBJ sc
 
 WITH -> with EXP as id COLON STMTS 
 
