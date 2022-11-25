@@ -8,8 +8,8 @@ DOTEXP -> EXP dot DOTEXPR | EXP optChain DOTEXPR
 DOTEXPR -> FUNCEXP | ELMT | id
 
 ASSIGN -> ASSIGNCHAIN | id ASSIGNOP EXP
-ASSIGNCHAIN -> id eq ASSIGNCHAIN COMMA | id eq EXP SC | id eq EXP
-ASSIGNCHAIN1 -> id eq ASSIGNCHAIN1 COMMA | id eq EXP | id | id COMMA ASSIGNCHAIN1 SC | id COMMA ASSIGNCHAIN1 | id eq EXP SC | id SC
+ASSIGNCHAIN -> id eq ASSIGNCHAIN COMMA | id eq ASSIGNCHAIN | id eq EXP SC | id eq EXP | id SC | id
+ASSIGNCHAIN1 -> id eq ASSIGNCHAIN1 COMMA | id eq ASSIGNCHAIN1 | id eq EXP | id | id COMMA ASSIGNCHAIN1 SC | id COMMA ASSIGNCHAIN1 | id eq EXP SC | id SC
 ASSIGNOP -> eq | pluseq | mineq | multeq | diveq | modeq | poweq | ampeq | boreq | xoreq | sreq | usreq | sleq | andeq | oreq | nullishCoalescingEq | id inc | id dec | inc id | dec id
 
 BREAK -> break SC | break

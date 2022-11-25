@@ -22,29 +22,12 @@ Dalam proses pembuatan program dari sebuah bahasa menjadi instruksi yang dapat d
 ## Screenshots
 ![Example screenshot](https://i.imgur.com/gQkFgDA.png)
 
-
 ## Setup
 Prerequirement:
 1. Python :https://www.python.org/downloads/
 
 ## Usage
 Method 1:
-  1. `python3 main.py <file_cnf>` 
+  1. `python3 main.py <file_javascript>` 
 
-  
-Method 2:
-  1. `py main.py`
-
-  Penggunaan awalan (prefix, py atau python3) tergantung apda os yang digunakan.
-  Pada linux gunakan `python3` sedangkan mac OS dan Windows gunakan `py`
-
-
-## Project Status
-Project is:  _no longer being worked on_
-
-
-## Room for Improvement
-1. Meningkatkan efisiensi program.
-2. Meningkatkan ketepatan grammar serta parser.
-3. Kerapian serta kebersihan program dan modul.
 
