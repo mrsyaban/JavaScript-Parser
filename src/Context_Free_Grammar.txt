@@ -69,9 +69,8 @@ EXPORTS -> lc EXPORT rc | lc EXPORT rc comma DEFWC | DEFWC comma lc EXPORT rc | 
 EXPORT -> id comma EXPORT | id 
 EXPORTAS -> id comma EXPORTAS comma id | str comma EXPORTAS comma id | id as id | str as id
 
-COND -> if lp EXP rp LC STMTS RC CONDTAIL | if lp LIT rp LC STMTS RC
-CONDTAIL -> else if lp EXP rp LC STMTS RC CONDTAIL | else if lp LIT rp LC STMTS RC CONDTAIL
-ELSE -> else LC STMTS RC | ε
+COND -> if LP EXP RP LC STMTS RC CONDTAIL | if LP LIT RP LC STMTS RC CONDTAIL
+CONDTAIL -> else if LP EXP RP LC STMTS RC CONDTAIL | CONDTAIL else LC STMTS RC | ε
 
 DELETE -> delete EXP SC | delete 
 
