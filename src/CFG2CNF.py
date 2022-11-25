@@ -152,12 +152,9 @@ def reduce_RHS_variable(CFG) :
     return CFG
 
 def change_terminalVariable_RHS(CFG) :
-<<<<<<< HEAD
-=======
     '''
     return RHS without both variable and terminal in Right Hand Side of production rules
     '''
->>>>>>> 4a8bc009f17f6882e5c91e197c1340658d4cc62c
     new_productions = {}
     del_productions = {}
 
