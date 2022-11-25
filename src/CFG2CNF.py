@@ -209,4 +209,5 @@ def CFG_to_CNF(CFG):
 
 
 f = open("dict.txt","w")
-f.write(str(CFG_to_CNF(read_grammar("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//Context_Free_Grammar.txt"))))
+# f.write(str(CFG_to_CNF(read_grammar("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//Context_Free_Grammar.txt"))))
+f.write(str(read_grammar("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//Context_Free_Grammar.txt")))
