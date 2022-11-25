@@ -1,2 +1,5 @@
-var x = 2;
-console.log(x)
+
+let 123 = [], y
+switch (x) {
+
+}

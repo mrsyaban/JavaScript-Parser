@@ -1,34 +1,30 @@
-S -> STMTS NL | NL
-STMTS -> STMTS NL1 STMT | STMT NL
-STMT -> COND | LOOP | ASSIGN | IMPORT | FUNCTION | TRY | LET | CONST | VAR | LET | THROW | SWITCH
+S -> STMTS NL | NL | STMTS
+STMTS -> STMTS NL STMT | STMTS SC STMT | STMT
+STMT -> COND | LOOP | ASSIGN | IMPORT | FUNCTION | TRY | CONST | VAR | LET | THROW | SWITCH | RET
 STMTLOOP -> STMTLOOP STMTS | STMTLOOP BREAK | STMTLOOP CONT | STMTS | BREAK | CONT
 
-EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ANONFUNCTION | ARR | ELMT | DICT | TUPLE | LIT | id
+EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ANONFUNCTION | ARR | ARREXP| ELMT | DICT | TUPLE | LIT | id
 DOTEXP -> EXP dot DOTEXPR | EXP optChain DOTEXPR
 DOTEXPR -> FUNCEXP | ELMT | id
 
 ASSIGN -> ASSIGNCHAIN | id ASSIGNOP EXP
-ASSIGNCHAIN -> id eq ASSIGNCHAIN COMMA | id eq EXP
+ASSIGNCHAIN -> id eq ASSIGNCHAIN COMMA | id eq EXP SC | id eq EXP
+ASSIGNCHAIN1 -> id eq ASSIGNCHAIN1 COMMA | id eq EXP | id | id eq EXP SC | id SC
 ASSIGNOP -> eq | pluseq | mineq | multeq | diveq | modeq | poweq | ampeq | boreq | xoreq | sreq | usreq | sleq | andeq | oreq | nullishCoalescingEq | id inc | id dec | inc id | dec id
 
-BREAK -> break SC
-CONT -> continue SC
+BREAK -> break SC | break
+CONT -> continue SC | continue
 
-SWITCH -> LP EXP RP LC CASES RC
-CASES -> CASE CASES | CASE DEFAULT | DEFAULT | CASE
-CASE -> case LP LIT RP COLON STMTS BREAK SC
+SWITCH -> switch LP EXP RP LC CASES RC
+CASES -> CASE | CASE DEFAULT CASE | DEFAULT CASE | CASE DEFAULT | DEFAULT
+CASE -> case LP LIT RP COLON STMTLOOP BREAK SC CASE | case LP LIT RP COLON STMTLOOP BREAK SC | case LP LIT RP COLON STMTLOOP BREAK CASE | case LP LIT RP COLON STMTLOOP BREAK
 
-DEFAULT -> default LP LIT RP COLON STMTS BREAK SC
+DEFAULT -> default COLON STMTLOOP BREAK
 
-CONST -> const ASSIGNCHAIN SC
+CONST -> const ASSIGNCHAIN SC | const ASSIGNCHAIN
 
-VAR -> var ASSIGNCHAIN SC | var id SC
-LET -> let ASSIGNCHAIN SC | let id SC
-
-PAREXP -> LP PAREXP1 RP
-PAREXP1 -> EXP | PARLOGICEXP | PARMATHEXP | ε
-PARLOGICEXP -> EXP NL RELOP NL EXP | not EXP | LOGICEXP
-PARMATHEXP -> EXP NL MATHOP2 NL EXP | MATHEXP
+VAR -> var ASSIGNCHAIN SC | var id SC | var ASSIGNCHAIN | var id
+LET -> let ASSIGNCHAIN SC | let id SC | let ASSIGNCHAIN | let id
 
 LOGICEXP -> EXP RELOP EXP | not EXP
 RELOP -> and | or | nullishCoalescing | in | not | neq | equal | strictEqual | gt | gte | lt | lte
@@ -39,28 +35,26 @@ MATHOP2 -> mult | pow | div | mod | plus | min | sl | sr | usr | amp | bor | xor
 
 FUNCEXP -> id TUPLE
 
-THROW -> throw EXP SC
+THROW -> throw EXP SC | throw EXP
 
-TRY -> LC STMTS RC CF
+TRY -> try LC STMTS RC CF | try LC RC CF
 CF -> CATCH | FINALLY | CATCH FINALLY
-CATCH -> LC STMTS RC
-FINALLY -> LC STMTS RC
+CATCH -> catch LP PARAM RP LC STMTS RC | catch LP PARAM RP LC RC
+FINALLY -> finally LC STMTS RC | finally LC RC
 
-ARR -> LP ARR RP | LB ARRLIST RB
-ARRLIST -> EXP | ε
+ARR -> LB EXP RB SC | LB RB SC | LB EXP RB | LB RB
+ARREXP -> id LB ARRLIST RB SC | id LB ARRLIST RB
 
 ELMT -> id LB EXP RB
 
-PARAM -> id | id COMMA PARAM1 | ε
-PARAM1 -> id | id COMMA PARAM1
+PARAM -> id | id COMMA PARAM
 
-OBJ -> LP OBJ RP | LC OBJLIST RC
-OBJLIST -> OBJLIST OBJ1 | OBJ1 | ε
+OBJ -> LP OBJ RP | LC OBJLIST RC | LC RC
+OBJLIST -> OBJLIST OBJ1 | OBJ1
 OBJ1 -> str COLON EXP COMMA | str COLON FUNCEXP
 
-TUPLE -> LP ARGS RP
-ARGS -> ARGS1 | ε
-ARGS1 -> ARGS1 COMMA EXP | EXP
+TUPLE -> LP ARGS RP | LP RP
+ARGS -> ARGS COMMA EXP | EXP
 
 LIT -> REAL | int | xbo | str | false | true | null
 REAL -> int dot int | dot int
@@ -72,45 +66,35 @@ EXPORTS -> lc EXPORT rc | lc EXPORT rc comma DEFWC | DEFWC comma lc EXPORT rc | 
 EXPORT -> id comma EXPORT | id
 EXPORTAS -> id comma EXPORTAS comma id | str comma EXPORTAS comma id | id as id | str as id
 
-COND -> if LP EXP RP LC STMTS RC CONDTAIL | if LP LIT RP LC STMTS RC CONDTAIL | ID1 eq EXP question EXP COLON EXP SC
-CONDTAIL -> else if LP EXP RP LC STMTS RC CONDTAIL | CONDTAIL else LC STMTS RC | ε
+COND -> if LP EXP RP LC STMTS RC CONDTAIL | if LP LIT RP LC STMTS RC CONDTAIL | ID1 eq EXP question EXP COLON EXP SC | ID1 eq EXP question EXP COLON EXP S | if LP EXP RP LC STMTS RC | if LP LIT RP LC STMTS RC | if LP EXP RP LC RC CONDTAIL | if LP LIT RP LC RC CONDTAIL | ID1 eq EXP question EXP COLON EXP SC | ID1 eq EXP question EXP COLON EXP S | if LP EXP RP LC RC | if LP LIT RP LC RC
+CONDTAIL -> else if LP EXP RP LC STMTS RC CONDTAIL | CONDTAIL else LC STMTS RC | else if LP EXP RP LC STMTS RC | else LC STMTS RC | else if LP EXP RP LC RC CONDTAIL | CONDTAIL else LC RC | else if LP EXP RP LC RC | else LC RC
 
-DELETE -> delete EXP SC | delete
+DELETE -> delete EXP SC | delete SC | delete EXP | delete
 
-LOOP ->  while  LP EXP  RP LC STMTLOOP RC | for  LP EXP in EXP  RP LC STMTLOOP RC | for  LP ASSIGNCHAIN sc RELOP sc MATHEXP  RP LC STMTLOOP RC | for  LP id sc RELOP sc MATHEXP  RP LC STMTLOOP RC
-
+LOOP -> while LP EXP RP LC STMTLOOP RC | for LP EXP in EXP RP LC STMTLOOP RC | for LP ASSIGNCHAIN SC RELOP SC MATHEXP RP LC STMTLOOP RC | for LP id SC RELOP SC MATHEXP RP LC STMTLOOP RC
 
 WITH -> with EXP as id COLON STMTS
 
-RET -> return EXP SC | return
+RET -> return EXP SC | return SC | return EXP | return
 
 ID -> id | ID dot id
 ID1 -> let id | var id | id
 
-FUNCTION -> function id LP PARAM RP LC STMTS RC SC
-ANONFUNCTION -> function LP PARAM RP LC STMTS RC SC
+FUNCTION -> function id LP PARAM RP LC STMTS RC SC | function id LP RP LC STMTS RC SC | function id LP PARAM RP LC STMTS RC | function id LP RP LC STMTS RC | function id LP PARAM RP LC RC SC | function id LP RP LC RC SC | function id LP PARAM RP LC RC | function id LP RP LC RC
+ANONFUNCTION -> function LP PARAM RP LC STMTS RC SC | function LP RP LC STMTS RC SC | function LP PARAM RP LC STMTS RC | function LP RP LC STMTS RC | function LP PARAM RP LC RC SC | function LP RP LC RC SC | function LP PARAM RP LC RC | function LP RP LC RC
 
-DEF -> def id LP DEFARGS RP DEFRETT COLON STMTS
-DEFARGS -> DEFARGS1 | ε
-DEFARGS1 -> DEFARGS1 COMMA id | id
-DEFARG -> id COLON ARGTYPE | id
-ARGTYPE -> LP ARGTYPE RP | id LB ARGTYPE RB | id
-DEFRETT -> min gt id | ε
+CLASS -> class id LP INHERIT RP COLON S | class id COLON S | class id LP INHERIT RP COLON S | class id LP RP COLON S | class id LP RP COLON S
+INHERIT -> INHERIT COMMA PKG | PKG | COMMA PKG
 
-CLASS -> class id LP INHERIT RP COLON S | class id COLON S
-INHERIT -> INHERIT COMMA PKG | PKG | ε
-
-COMMA -> comma NL
-COLON -> colon NL
-BREAK -> NL break
-LC -> lc NL
-RC -> NL rc
-LB -> lb NL
-RB -> NL rb
-LP -> lp NL
-RP -> NL rp
-NL -> NL nl | nl | ε
-NL1 -> NL1 nl | nl
-SC -> sc NL
+COMMA -> comma NL | comma
+COLON -> colon NL | colon
+LC -> lc NL | lc
+RC -> NL rc | rc
+LB -> lb NL | lb
+RB -> NL rb | rb
+LP -> lp NL | lp
+RP -> NL rp | rp
+NL -> NL nl | nl
+SC -> sc NL | sc
 
 ENDLINE

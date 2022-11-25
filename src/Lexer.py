@@ -1,26 +1,27 @@
 import sys
 import re
 # list token untuk syntax ke token
-token_exp = [
+list_of_token = [
+    # komen
     (r'[ \t]+',                 None),
-    (r'#[^\n]*',                None),
+    (r'\/\/[^\n]*',                None),
     (r'[\n]+[ \t]*\'\'\'[(?!(\'\'\'))\w\W]*\'\'\'',  None),
     (r'[\n]+[ \t]*\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"',  None),
+    (r'\\\*[(?!(\\\*))\w\W]*\\\*',       None),
 
     # Integer and String
     (r'\"[^\"\n]*\"',           "str"),
     (r'\'[^\'\n]*\'',           "str"),
-    (r'[\+\-]?[0-9]+\.[0-9]+',  "REAL"),
     (r'[\+\-]?[1-9][0-9]+',     "int"),
     (r'[\+\-]?[0-9]',           "int"),
 
     # Delimiter
     (r'\n',                     "nl"),
-    (r'\(',                     "lp"), # Kurung Biasa KIri
+    (r'\(',                     "lp"),
     (r'\)',                     "rp"),
-    (r'\[',                     "lb"), # Kurung Siku KIri
+    (r'\[',                     "lb"),
     (r'\]',                     "rb"),
-    (r'\{',                     "lc"), # Kurung Kurawal Kiri
+    (r'\{',                     "lc"), 
     (r'\}',                     "rc"),
     (r'\;',                     "sc"), 
     (r'\:',                     "colon"),
@@ -66,10 +67,6 @@ token_exp = [
     (r'<<(?!\<)',               "sl"),
     (r'>>(?!\>)',               "sr"),
     (r'>>>',                    "usr"),
-
-    # (r'\/\/',                   "floor"),
-    # (r'\->',                    "ARROW"),
-    # (r'\/\/=',                  "div div eq"),
     
     # Keyword
     (r'\bbreak\b',              "break"),
@@ -95,27 +92,10 @@ token_exp = [
     (r'\bvar\b',                "var"),
     (r'\bwhile\b',              "while"),
     (r'\bin\b',                 "in"),
-    (r'\bfrom\b',               "from"),
-    (r'\bimport\b',             "import"),
-    (r'\bas\b',                 "as"),
+    (r'\bof\b',                 "of"),
     (r'\w+[.]\w+',              "DOTEXPR"),
     (r'\.',                     "dot"),
-    (r'\\\*[(?!(\\\*))\w\W]*\\\*',       "MULTILINE"),
-    (r'[A-Za-z_][A-Za-z0-9_]*', "id"),
-    # (r'\bpass\b',               "pass"),
-    # (r'\bis\b',                 "IS"),
-    # (r'\braise\b',              "RAISE"),
-    # (r'\bwith\b',               "WITH"),
-    # (r'\bobject\b',             "LIT"),
-    # (r'\bint\b',                "LIT"),
-    # (r'\bstr\b',                "LIT"),
-    # (r'\bfloat\b',              "LIT"),
-    # (r'\bcomplex\b',            "LIT"),
-    # (r'\blist\b',               "LIT"),
-    # (r'\btuple\b',              "LIT"),
-    # (r'\bset\b',                "LIT"),
-    # (r'\'\'\'[(?!(\'\'\'))\w\W]*\'\'\'',       "MULTILINE"),
-    # (r'\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"',       "MULTILINE"),
+    (r'[A-Za-z\_\$][\$A-Za-z0-9\_]*', "id")
 ]
 
 
@@ -123,53 +103,47 @@ token_exp = [
 newA = r'[\n]+[ \t]*\'\'\'[(?!(\'\'\'))\w\W]*\'\'\''
 newB = r'[\n]+[ \t]*\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"'
 
-def lexer(teks, token_exp):
-    pos = 0 # posisi karakter pada seluruh potongan teks (absolut)
+def lexer(teks, list_of_token):
+    curLine = 1 # posisi baris saat ini
     cur = 1 # posisi karakter relatif terhadap baris tempat dia berada
-    line = 1 # posisi baris saat ini
+    curPos = 0 # posisi karakter pada seluruh potongan teks (absolut)
     tokens = []
-    while pos < len(teks):
-        if teks[pos] == '\n':
+    while curPos < len(teks):
+        if teks[curPos] == '\n':
             cur = 1
-            line += 1
+            curLine += 1
         match = None
-        for t in token_exp:
+        for t in list_of_token:
             pattern, tag = t
-            if line == 1:
+            if curLine == 1:
                 if pattern == newA:
                     pattern = r'[^\w]*[ \t]*\'\'\'[(?!(\'\'\'))\w\W]*\'\'\''
                 elif pattern == newB:
                     pattern = r'[^\w]*[ \t]*\"\"\"[(?!(\"\"\"))\w\W]*\"\"\"'
             regex = re.compile(pattern)
-            match = regex.match(teks, pos)
+            match = regex.match(teks, curPos)
             if match:
                 if tag:
                     token = tag
                     tokens.append(token)
                 break
-
         if not match:
-            print("ILLEGAL CHARACTER")
             print("SYNTAX ERROR")
             sys.exit(1)
         else:
-            pos = match.end(0)
+            curPos = match.end(0)
         cur += 1
+
     return tokens
 
-def create_token(sentence):
-    file = open(sentence)
-    char = file.read()
+def convert_to_tokenString(file_path):
+    file = open(file_path)
+    stringFile = file.read()
     file.close()
 
-    tokens = lexer(char,token_exp)
-    tokenArray = []
-    for token in tokens:
-        tokenArray.append(token)
-    print(" ".join(tokenArray))
-    return " ".join(tokenArray)
+    tokenList = lexer(stringFile,list_of_token)
+    tokenString = " ".join(tokenList)
 
-# if __name__ == "__main__":
-#     create_token('test.txt')
+    return tokenString
 
-print(create_token("test//test.txt"))
+print(convert_to_tokenString("D:/ITB 21/KULYAHHH/SEMESTER 3/TBFO/Tubes TBFO - JS Parser/TBFO_JSParser/test/test.txt"))

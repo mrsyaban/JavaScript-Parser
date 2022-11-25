@@ -71,7 +71,7 @@
 # # def, anjay, '(', ')'
 
 from CFG2CNF import *
-import ast
+
 
 # f.write(str(CFG_to_CNF(read_grammar("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//Context_Free_Grammar.txt"))))
 # CFG = ast.literal_eval(str(read_grammar("D://ITB 21//KULYAHHH//SEMESTER 3//TBFO//Tubes TBFO - JS Parser//TBFO_JSParser//src//Context_Free_Grammar.txt")))
@@ -93,6 +93,7 @@ for i in range(len(list_RHS)) :
     product = list_RHS[i]
     for RHS in product :
         if 'Îµ' in RHS :
+        # if 'PARAM ' in RHS :
             epsilonProduct.update({list_Rules[i][0] : list_Rules[i][1]})
             break
 
