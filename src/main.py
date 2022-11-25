@@ -4,13 +4,14 @@ from CYK import *
 from CFG2CNF import *
 from Lexer import *
 
-# if __name__ == "__main__":
-#     argument_parser = ArgumentParser()
-#     argument_parser.add_argument("nama_file", type=str, help="Nama File yang hendak diparse.")
+if __name__ == "__main__":
+    argument_parser = ArgumentParser()
+    argument_parser.add_argument("file_name", type=str, help="< JavaScript_file_name >")
 
-#     args = argument_parser.parse_args()
+    args = argument_parser.parse_args()
 
-if CYK_parse(CFG_to_CNF(read_grammar("src/Context_Free_Grammar.txt")), convert_to_tokenString("test/inputAcc.js")):
-    print("ACCEPTED")
-else:
-    print("SYNTAX ERROR")
+    CNF = CFG_to_CNF(read_grammar("src/Context_Free_Grammar.txt"))
+    if CYK_checking(CNF, convert_to_tokenString(args.file_name)):
+        print("ACCEPTED")
+    else:
+        print("SYNTAX ERROR")

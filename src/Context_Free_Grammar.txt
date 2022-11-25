@@ -9,7 +9,7 @@ DOTEXPR -> FUNCEXP | ELMT | id
 
 ASSIGN -> ASSIGNCHAIN | id ASSIGNOP EXP
 ASSIGNCHAIN -> id eq ASSIGNCHAIN COMMA | id eq EXP SC | id eq EXP
-ASSIGNCHAIN1 -> id eq ASSIGNCHAIN1 COMMA | id eq EXP | id | id eq EXP SC | id SC
+ASSIGNCHAIN1 -> id eq ASSIGNCHAIN1 COMMA | id eq EXP | id | id COMMA ASSIGNCHAIN1 SC | id COMMA ASSIGNCHAIN1 | id eq EXP SC | id SC
 ASSIGNOP -> eq | pluseq | mineq | multeq | diveq | modeq | poweq | ampeq | boreq | xoreq | sreq | usreq | sleq | andeq | oreq | nullishCoalescingEq | id inc | id dec | inc id | dec id
 
 BREAK -> break SC | break
@@ -23,8 +23,8 @@ DEFAULT -> default COLON STMTLOOP BREAK
 
 CONST -> const ASSIGNCHAIN SC | const ASSIGNCHAIN
 
-VAR -> var ASSIGNCHAIN SC | var id SC | var ASSIGNCHAIN | var id
-LET -> let ASSIGNCHAIN SC | let id SC | let ASSIGNCHAIN | let id
+VAR -> var ASSIGNCHAIN1 SC | var id SC | var ASSIGNCHAIN1 | var id
+LET -> let ASSIGNCHAIN1 SC | let id SC | let ASSIGNCHAIN1 | let id
 
 LOGICEXP -> EXP RELOP EXP | not EXP
 RELOP -> and | or | nullishCoalescing | in | not | neq | equal | strictEqual | gt | gte | lt | lte

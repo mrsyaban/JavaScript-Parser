@@ -1,5 +1,4 @@
-
-let 123 = [], y
-switch (x) {
-
-}
+let x
+for (let i = 0; i < 5; i++) {
+    x = i
+  }

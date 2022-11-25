@@ -146,4 +146,4 @@ def convert_to_tokenString(file_path):
 
     return tokenString
 
-print(convert_to_tokenString("D:/ITB 21/KULYAHHH/SEMESTER 3/TBFO/Tubes TBFO - JS Parser/TBFO_JSParser/test/test.txt"))
+print(convert_to_tokenString("D:/ITB 21/KULYAHHH/SEMESTER 3/TBFO/Tubes TBFO - JS Parser/TBFO_JSParser/test/test.js"))
