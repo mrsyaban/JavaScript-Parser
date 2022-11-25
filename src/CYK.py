@@ -1,4 +1,4 @@
-def CYK_parse(CNF, string_input):
+def CYK_Checking(CNF, string_input):
     W = string_input.split(" ")
     N = len(W)
     T = [[set([]) for j in range(N)] for i in range(N)]

@@ -108,7 +108,7 @@ def remove_Unit_Product(CFG) :
 
 def reduce_RHS_variable(CFG) :
     """
-    return RHS without more than 2 variables
+    return CFG without more than 2 variables in Right Hand Side of Production Rules
     """
     new_productions = {}
     del_productions = {}
@@ -152,7 +152,9 @@ def reduce_RHS_variable(CFG) :
     return CFG
 
 def change_terminalVariable_RHS(CFG) :
-
+    '''
+    return RHS without both variable and terminal in Right Hand Side of production rules
+    '''
     new_productions = {}
     del_productions = {}
 
