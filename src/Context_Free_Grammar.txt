@@ -1,16 +1,16 @@
 S -> STMTS NL | ε
 STMTS -> STMTS NL1 STMT | STMT NL
-STMT -> COND | LOOP | RAISE | RET | EXP | ASSIGN | IMPORT | CLASS | DEF | TRY | LET | CONST | VAR | LET | THROW | SWITCH | BREAK | CONT pass | break | cont
+STMT -> COND | LOOP | ASSIGN | IMPORT | FUNCTION | TRY | LET | CONST | VAR | LET | THROW | SWITCH
 
 ASSIGN -> ASSIGNCHAIN | id ASSIGNOP EXP
 ASSIGNCHAIN -> id eq ASSIGNCHAIN | id eq EXP
-ASSIGNOP -> eq | pluseq | mineq | multeq | diveq | modeq | poweq | ampeq | boreq | bnoteq | sreq | usreq | sleq | id inc | id dec | inc id | dec id
+ASSIGNOP -> eq | pluseq | mineq | multeq | diveq | modeq | poweq | ampeq | boreq | xoreq | sreq | usreq | sleq | andeq | oreq | nullishCoalescingEq | id inc | id dec | inc id | dec id
 
 VAR -> var ASSIGNCHAIN | var id SC
 LET -> let ASSIGNCHAIN | let id SC
 
-EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ARR | ELMT | DICT | TUPLE | LIT | id
-DOTEXP -> EXP dot DOTEXPR
+EXP -> PAREXP | DOTEXP | LOGICEXP | MATHEXP | FUNCEXP | ANONFUNCTION | ARR | ELMT | DICT | TUPLE | LIT | id
+DOTEXP -> EXP dot DOTEXPR | EXP optChain DOTEXPR
 DOTEXPR -> FUNCEXP | ELMT | id
 
 SWITCH -> LP EXP RP LC CASES DEFAULT RC
@@ -28,11 +28,11 @@ PARLOGICEXP -> EXP NL RELOP NL EXP | not EXP | LOGICEXP
 PARMATHEXP -> EXP NL MATHOP2 NL EXP | MATHEXP
 
 LOGICEXP -> EXP RELOP EXP | not EXP
-RELOP -> and | or | in | not | neq | equal | strictEqual | gt | gte | lt | lte
+RELOP -> and | or | nullishCoalescing | in | not | neq | equal | strictEqual | gt | gte | lt | lte
 
 MATHEXP -> EXP MATHOP2 EXP | MATHOP1 EXP
 MATHOP1 -> plus | min | bnot
-MATHOP2 -> mult | pow | div | mod | plus | min | sl | sr | usr | amp | bor
+MATHOP2 -> mult | pow | div | mod | plus | min | sl | sr | usr | amp | bor | xor
 
 FUNCEXP -> id TUPLE
 
@@ -48,8 +48,8 @@ ARRLIST -> EXP | ε
 
 ELMT -> id LB EXP RB
 
-PARAM -> id | id dot PARAM1 | ε
-PARAM1 -> id | id dot PARAM1
+PARAM -> id | id COMMA PARAM1 | ε
+PARAM1 -> id | id COMMA PARAM1
 
 OBJ -> LP OBJ RP | LC OBJLIST RC
 OBJLIST -> OBJLIST OBJ1 | OBJ1 | ε
@@ -69,10 +69,12 @@ EXPORTS -> lc EXPORT rc | lc EXPORT rc comma DEFWC | DEFWC comma lc EXPORT rc | 
 EXPORT -> id comma EXPORT | id 
 EXPORTAS -> id comma EXPORTAS comma id | str comma EXPORTAS comma id | id as id | str as id
 
-COND -> if LP EXP RP LC STMTS RC CONDTAIL | if LP LIT RP LC STMTS RC CONDTAIL
+COND -> if LP EXP RP LC STMTS RC CONDTAIL | if LP LIT RP LC STMTS RC CONDTAIL | ID1 eq EXP question EXP COLON EXP SC
 CONDTAIL -> else if LP EXP RP LC STMTS RC CONDTAIL | CONDTAIL else LC STMTS RC | ε
 
-LOOP ->  while lp EXP rp LC STMTS RC | for lp EXP in EXP rp LC STMTS RC | for lp ASSIGNCHAIN sc RELOP sc MATHEXP rp LC STMTS RC | for lp id sc RELOP sc MATHEXP rp LC STMTS RC
+DELETE -> delete EXP SC | delete 
+
+LOOP ->  while  LP EXP  RP LC STMTS RC | for  LP EXP in EXP  RP LC STMTS RC | for  LP ASSIGNCHAIN sc RELOP sc MATHEXP  RP LC STMTS RC | for  LP id sc RELOP sc MATHEXP  RP LC STMTS RC
 
 CONST -> const ASSIGNCHAIN sc | const ARR sc | const OBJ sc
 
@@ -81,8 +83,10 @@ WITH -> with EXP as id COLON STMTS
 RET -> return EXP SC | return
 
 ID -> id | ID dot id
+ID1 -> let id | var id | id 
 
-FUNCTION -> function id lp id rp
+FUNCTION -> function id LP PARAM RP LC STMTS RC SC
+ANONFUNCTION -> function LP PARAM RP LC STMTS RC SC
 
 DEF -> def id LP DEFARGS RP DEFRETT COLON STMTS
 DEFARGS -> DEFARGS1 | ε
