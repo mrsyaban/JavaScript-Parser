@@ -19,15 +19,13 @@ Dalam proses pembuatan program dari sebuah bahasa menjadi instruksi yang dapat d
 ## Features
 - JavaScript CYK Parser.
 
-## Screenshots
-![Example screenshot](https://i.imgur.com/gQkFgDA.png)
 
 ## Setup
 Prerequirement:
 1. Python :https://www.python.org/downloads/
 
-## Usage
-Method 1:
-  1. `python3 main.py <file_javascript>` 
 
+## Room for Improvement
+1. Meningkatkan ketepatan grammar serta parser.
+2. Kerapian serta kebersihan program dan modul.
 
